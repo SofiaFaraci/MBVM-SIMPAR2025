@@ -82,8 +82,17 @@ void BatteryComponent::spin()
 void BatteryComponent::BatteryStateSubscriptionCallback(const sensor_msgs::msg::BatteryState::SharedPtr msg)
 {
     RCLCPP_INFO_STREAM(m_node->get_logger(), "BatteryChargingComponent::BatteryStateSubscriptionCallback " << msg->percentage);
+    float percentage = msg->percentage;
     m_mutex.lock();
-    m_batteryLevel = msg->percentage;
+    // the real battery level is not stable, so we use an isteresi method to avoid flickering
+    if(m_batteryLevel <= 30.0 && percentage < 35.0 && percentage > 30.0)
+    {
+        m_batteryLevel = 30.0;
+    }
+    else
+    {
+        m_batteryLevel = percentage;
+    }
     m_mutex.unlock();
 }
 
