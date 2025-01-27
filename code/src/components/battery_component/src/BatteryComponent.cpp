@@ -79,7 +79,7 @@ void BatteryComponent::spin()
 }
 
 
-void BatteryChargingComponent::BatteryStateSubscriptionCallback(const sensor_msgs::msg::BatteryState::SharedPtr msg)
+void BatteryComponent::BatteryStateSubscriptionCallback(const sensor_msgs::msg::BatteryState::SharedPtr msg)
 {
     RCLCPP_INFO_STREAM(m_node->get_logger(), "BatteryChargingComponent::BatteryStateSubscriptionCallback" << msg->voltage);
 }
