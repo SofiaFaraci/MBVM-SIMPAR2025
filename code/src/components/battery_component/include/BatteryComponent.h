@@ -14,7 +14,7 @@
 #include <yarp/os/LogStream.h>
 #include <yarp/os/RFModule.h>
 #include <yarp/os/RpcClient.h>
-
+#include <sensor_msgs/msg/battery_state.hpp>
 
 class BatteryComponent
 {
