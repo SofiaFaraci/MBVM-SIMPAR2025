@@ -81,7 +81,10 @@ void BatteryComponent::spin()
 
 void BatteryComponent::BatteryStateSubscriptionCallback(const sensor_msgs::msg::BatteryState::SharedPtr msg)
 {
-    RCLCPP_INFO_STREAM(m_node->get_logger(), "BatteryChargingComponent::BatteryStateSubscriptionCallback" << msg->voltage);
+    RCLCPP_INFO_STREAM(m_node->get_logger(), "BatteryChargingComponent::BatteryStateSubscriptionCallback " << msg->percentage);
+    m_mutex.lock();
+    m_batteryLevel = msg->percentage;
+    m_mutex.unlock();
 }
 
 
@@ -89,7 +92,10 @@ void BatteryComponent::BatteryStatePublisherCallback()
 {
     std_msgs::msg::Int32 msg;
     int charge;
-    getCharge(charge);
-    msg.data = charge;
+    // getCharge(charge);
+    m_mutex.lock();
+    msg.data = static_cast<int>(m_batteryLevel);
+    m_mutex.unlock();
+    // msg.data = charge;
     m_publisherBatteryState->publish(msg);
 }

@@ -36,6 +36,8 @@ private:
     rclcpp::TimerBase::SharedPtr m_timer;
     rclcpp::Subscription<sensor_msgs::msg::BatteryState>::SharedPtr m_subscriptionBatteryState;
     std::atomic<bool> m_batteryCharging{false};
+    float m_batteryLevel{100.0};
+    std::mutex m_mutex;
     std::queue<double> m_lastBatteryVoltagesBeforeChange;
     std::queue<double> m_lastBatteryVoltagesAfterChange;
     bool m_changeDetected{false};
