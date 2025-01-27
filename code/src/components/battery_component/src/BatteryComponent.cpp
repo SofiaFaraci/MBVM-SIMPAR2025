@@ -17,7 +17,7 @@ bool BatteryComponent::start(int argc, char*argv[])
     m_node = rclcpp::Node::make_shared("BatteryComponentNode");
     m_subscriptionBatteryState = m_node->create_subscription<sensor_msgs::msg::BatteryState>("/battery_status", 
                                                                                              10, 
-                                                                                             std::bind(&BatteryChargingComponent::BatteryStateSubscriptionCallback, 
+                                                                                             std::bind(&BatteryComponent::BatteryStateSubscriptionCallback, 
                                                                                                        this, 
                                                                                                        std::placeholders::_1)
                                                                                              );
