@@ -26,6 +26,7 @@ public:
     bool close();
     void spin();
     bool getCharge(int&);
+    void BatteryStateSubscriptionCallback(const sensor_msgs::msg::BatteryState::SharedPtr msg);
     void BatteryStatePublisherCallback();
 
 
@@ -33,6 +34,7 @@ private:
     rclcpp::Node::SharedPtr m_node;
     rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr m_publisherBatteryState;
     rclcpp::TimerBase::SharedPtr m_timer;
+    rclcpp::Subscription<sensor_msgs::msg::BatteryState>::SharedPtr m_subscriptionBatteryState;
     std::atomic<bool> m_batteryCharging{false};
     std::queue<double> m_lastBatteryVoltagesBeforeChange;
     std::queue<double> m_lastBatteryVoltagesAfterChange;

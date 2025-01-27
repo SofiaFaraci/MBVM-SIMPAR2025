@@ -15,7 +15,12 @@ bool BatteryComponent::start(int argc, char*argv[])
         rclcpp::init(/*argc*/ argc, /*argv*/ argv);
     }
     m_node = rclcpp::Node::make_shared("BatteryComponentNode");
-    
+    m_subscriptionBatteryState = m_node->create_subscription<sensor_msgs::msg::BatteryState>("/battery_status", 
+                                                                                             10, 
+                                                                                             std::bind(&BatteryChargingComponent::BatteryStateSubscriptionCallback, 
+                                                                                                       this, 
+                                                                                                       std::placeholders::_1)
+                                                                                             );
     m_publisherBatteryState = m_node->create_publisher<std_msgs::msg::Int32>("/battery_level", 10);
     m_timer = m_node->create_wall_timer(std::chrono::seconds(1), std::bind(&BatteryComponent::BatteryStatePublisherCallback, this));
     RCLCPP_INFO(m_node->get_logger(), "BatteryComponent::start");
@@ -71,6 +76,12 @@ bool BatteryComponent::close()
 void BatteryComponent::spin()
 {
     rclcpp::spin(m_node);  
+}
+
+
+void BatteryChargingComponent::BatteryStateSubscriptionCallback(const sensor_msgs::msg::BatteryState::SharedPtr msg)
+{
+    RCLCPP_INFO_STREAM(m_node->get_logger(), "BatteryChargingComponent::BatteryStateSubscriptionCallback" << msg->voltage);
 }
 
 
